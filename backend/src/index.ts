@@ -4,6 +4,11 @@ import { type FastifyRequest, type FastifyReply } from 'fastify'
 import Pusher from 'pusher';
 import cors from '@fastify/cors'
 
+//sleep function
+function sleep (ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 const pusher = new Pusher({
   host: '127.0.0.1',
   appId: 'some-id',
@@ -38,10 +43,17 @@ fastify.post('/auth', async function handler (req: FastifyRequest, reply: Fastif
 // Declare a route
 fastify.get('/', async function handler (request, reply) {
   const client = (request.query as any).client;
+
   console.log('sending to', `notification-${client}`)
+  await sleep(1000)
   pusher.trigger(`notification-${client}`, 'client-message', {
     sender: 'Super Admin',
-    message: 'Hello, to my channel! ' + client
+    message: 'Processing request of MFIR' + client + '...'
+  });
+  await sleep(3000)
+  pusher.trigger(`notification-${client}`, 'client-message', {
+    sender: 'Super Admin',
+    message: 'Request of MFIR' + client + ' processed'
   });
   return { published: true }
 })
