@@ -1,0 +1,21 @@
+{
+  "debug": true,
+  "port": 6001,
+  "appManager.array.apps": [
+    {
+      "id": "some-id",
+      "key": "some-key",
+      "secret": "some-secret",
+      "hasClientEventWebhooks": true,
+      "webhooks": [
+        {
+          "url": "http://localhost:3000",
+          "events": [
+            "notification-571246"
+          ]
+        }
+      ],
+      "enableClientMessages": true
+    }
+  ]
+}
