@@ -52,12 +52,12 @@ fastify.get('/', async function handler (request, reply) {
   const client = (request.query as any).client;
 
   console.log('sending to', `client: ${client}`)
-  await sleep(1000)
+  // await sleep(1000)
   pusher.sendToUser(client, 'client-message', {
     sender: 'Super Admin',
     message: 'Processing request of MFIR' + client + '...'
   });
-  await sleep(3000)
+  // await sleep(3000)
   pusher.sendToUser(client, 'client-message', {
     sender: 'Super Admin',
     message: 'Request of MFIR' + client + ' processed'
