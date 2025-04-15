@@ -10,6 +10,7 @@ interface Message {
 export default function Logged () {
   const params = useParams();
   const [messages, setMessages] = useState<Message[]>([]);
+
   useEffect(() => {
     pusher.connection.bind('connected', () => {
       console.log('connected')
@@ -19,17 +20,17 @@ export default function Logged () {
       console.log('disconnected')
     })
 
-    const channel = pusher.subscribe('notification-' + params.client)
+    // const channel = pusher.subscribe('notification-' + params.client)
 
     const handleMessage = (data: Message) => {
-      console.log(data);
+      console.log('handling message', data);
       setMessages(prevMessages => [...prevMessages, data]); // Update messages state correctly
     }
 
-    channel.bind('client-message', handleMessage);
+    pusher.user.bind('client-message', handleMessage);
 
     return () => {
-      channel.unbind('client-message', handleMessage);
+      pusher.user.unbind('client-message', handleMessage);
     }
   }, []);
 

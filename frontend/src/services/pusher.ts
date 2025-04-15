@@ -8,6 +8,17 @@ const pusher = new Pusher('some-key', {
   cluster: 'us3',
   disableStats: true,
   enabledTransports: ['ws'],
+  userAuthentication: {
+    endpoint: 'http://localhost:3000/auth',
+    transport: 'ajax',
+    paramsProvider: () => {
+      const storedClient = localStorage.getItem('client');
+      return {
+        client: storedClient,
+      };
+    },
+    headers: {}
+  },
 });
 
 const globalForPusher = globalThis as unknown as { pusher: typeof pusher }

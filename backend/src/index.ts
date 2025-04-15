@@ -3,6 +3,7 @@ import Fastify from 'fastify'
 import { type FastifyRequest, type FastifyReply } from 'fastify'
 import Pusher from 'pusher';
 import cors from '@fastify/cors'
+import formbody from '@fastify/formbody'
 
 //sleep function
 function sleep (ms: number) {
@@ -15,7 +16,7 @@ const pusher = new Pusher({
   key: 'some-key',
   secret: 'some-secret',
   port: '6001',
-  useTLS: false,
+  useTLS: true,
   cluster: 'us3'
 })
 
@@ -26,17 +27,23 @@ const fastify = Fastify({
 fastify.register(cors, {
 })
 
+fastify.register(formbody)
+
 fastify.post('/auth', async function handler (req: FastifyRequest, reply: FastifyReply) {
   const body = req.body as any;
+  console.log('body ====>', body)
   const socketId = body.socket_id;
   const user: Pusher.UserChannelData = {
-    id: "some_id",
+    id: body.client,
     user_info: {
-      name: "John Smith",
+      name: "John Smith"
     }
   };
+
+  console.log('user ====>', user)
   const authResponse = pusher.authenticateUser(socketId, user);
 
+  console.log('authResponse ====>', authResponse)
   return authResponse
 })
 
@@ -44,14 +51,14 @@ fastify.post('/auth', async function handler (req: FastifyRequest, reply: Fastif
 fastify.get('/', async function handler (request, reply) {
   const client = (request.query as any).client;
 
-  console.log('sending to', `notification-${client}`)
+  console.log('sending to', `client: ${client}`)
   await sleep(1000)
-  pusher.trigger(`notification-${client}`, 'client-message', {
+  pusher.sendToUser(client, 'client-message', {
     sender: 'Super Admin',
     message: 'Processing request of MFIR' + client + '...'
   });
   await sleep(3000)
-  pusher.trigger(`notification-${client}`, 'client-message', {
+  pusher.sendToUser(client, 'client-message', {
     sender: 'Super Admin',
     message: 'Request of MFIR' + client + ' processed'
   });
