@@ -7,15 +7,8 @@
       "key": "some-key",
       "secret": "some-secret",
       "hasClientEventWebhooks": true,
-      "webhooks": [
-        {
-          "url": "http://localhost:3000",
-          "events": [
-            "notification-571246"
-          ]
-        }
-      ],
-      "enableClientMessages": true
+      "enableClientMessages": true,
+      "enableUserAuthentication": true
     }
   ]
 }

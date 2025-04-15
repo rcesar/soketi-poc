@@ -1,4 +1,4 @@
-FROM quay.io/soketi/soketi:1.0-16-distroless AS soketi
+FROM quay.io/soketi/soketi:1.6.1-16-distroless AS soketi
 
 WORKDIR /app
 COPY . .
