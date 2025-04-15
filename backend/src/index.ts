@@ -4,6 +4,7 @@ import { type FastifyRequest, type FastifyReply } from 'fastify'
 import Pusher from 'pusher';
 import cors from '@fastify/cors'
 import formbody from '@fastify/formbody'
+import proxy from '@fastify/http-proxy'
 
 //sleep function
 function sleep (ms: number) {
@@ -16,7 +17,7 @@ const pusher = new Pusher({
   key: 'some-key',
   secret: 'some-secret',
   port: '6001',
-  useTLS: true,
+  useTLS: false,
   cluster: 'us3'
 })
 
@@ -24,10 +25,15 @@ const fastify = Fastify({
   logger: true
 })
 
-fastify.register(cors, {
+fastify.register(formbody)
+
+fastify.register(proxy, {
+  wsUpstream: 'http://127.0.0.1:6001',
+  websocket: true,
+  prefix: '/socket'
 })
 
-fastify.register(formbody)
+fastify.register(cors)
 
 fastify.post('/auth', async function handler (req: FastifyRequest, reply: FastifyReply) {
   const body = req.body as any;
@@ -48,17 +54,17 @@ fastify.post('/auth', async function handler (req: FastifyRequest, reply: Fastif
 })
 
 // Declare a route
-fastify.get('/', async function handler (request, reply) {
+fastify.get('/message', async function handler (request, reply) {
   const client = (request.query as any).client;
 
   console.log('sending to', `client: ${client}`)
-  // await sleep(1000)
-  pusher.sendToUser(client, 'client-message', {
+  await sleep(1000)
+  await pusher.sendToUser(client, 'client-message', {
     sender: 'Super Admin',
     message: 'Processing request of MFIR' + client + '...'
   });
-  // await sleep(3000)
-  pusher.sendToUser(client, 'client-message', {
+  await sleep(3000)
+  await pusher.sendToUser(client, 'client-message', {
     sender: 'Super Admin',
     message: 'Request of MFIR' + client + ' processed'
   });

@@ -20,7 +20,7 @@ export default function Login () {
       alert('Error signing in. Please check your MFIR and try again.')
     })
     pusher.bind_global((...args) => {
-      console.log('global event', args)
+      console.log('global event ======>', args)
     })
   }
 

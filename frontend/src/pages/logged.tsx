@@ -36,7 +36,7 @@ export default function Logged () {
 
   async function callBackend () {
     setMessages(prevMessages => [...prevMessages, { sender: 'User of company (frontend)', message: 'Calling backend...' }])
-    await fetch('http://localhost:3000/?client=' + params.client)
+    await fetch('http://localhost:3000/message?client=' + params.client)
   }
 
   return (
