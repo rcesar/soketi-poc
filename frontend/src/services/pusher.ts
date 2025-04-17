@@ -9,7 +9,7 @@ const pusher = new Pusher('eparts', {
   disableStats: true,
   enabledTransports: ['ws'],
   userAuthentication: {
-    endpoint: 'http://localhost:8050/auth',
+    endpoint: 'http://localhost:3000/auth',
     transport: 'ajax',
     paramsProvider: () => {
       const storedClient = localStorage.getItem('client');
