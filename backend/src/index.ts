@@ -4,7 +4,6 @@ import { type FastifyRequest, type FastifyReply } from 'fastify'
 import Pusher from 'pusher';
 import cors from '@fastify/cors'
 import formbody from '@fastify/formbody'
-import proxy from '@fastify/http-proxy'
 
 //sleep function
 function sleep (ms: number) {
@@ -12,12 +11,11 @@ function sleep (ms: number) {
 }
 
 const pusher = new Pusher({
-  host: '127.0.0.1',
-  appId: 'some-id',
-  key: 'some-key',
-  secret: 'some-secret',
-  port: '6001',
-  useTLS: false,
+  host: 'eparts-routing-exec.dev.flyembraer.com',
+  appId: 'eparts',
+  key: 'eparts',
+  secret: 'eparts-secret',
+  useTLS: true,
   cluster: 'us3'
 })
 
@@ -26,12 +24,6 @@ const fastify = Fastify({
 })
 
 fastify.register(formbody)
-
-fastify.register(proxy, {
-  wsUpstream: 'http://127.0.0.1:6001',
-  websocket: true,
-  prefix: '/socket'
-})
 
 fastify.register(cors)
 
