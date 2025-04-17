@@ -1,16 +1,15 @@
 import Pusher from 'pusher-js'
 
 Pusher.logToConsole = true;
-const pusher = new Pusher('some-key', {
-  wsHost: 'localhost',
+const pusher = new Pusher('eparts', {
+  wsHost: 'eparts-routing-exec.dev.flyembraer.com',
   wsPath: '/socket',
-  wsPort: 3000,
-  forceTLS: false,
+  forceTLS: true,
   cluster: 'us3',
   disableStats: true,
   enabledTransports: ['ws'],
   userAuthentication: {
-    endpoint: 'http://localhost:3000/auth',
+    endpoint: 'http://localhost:8050/auth',
     transport: 'ajax',
     paramsProvider: () => {
       const storedClient = localStorage.getItem('client');
